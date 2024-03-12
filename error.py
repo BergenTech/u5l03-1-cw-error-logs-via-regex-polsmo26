@@ -1,8 +1,14 @@
-import json, csv
+import json, csv, re
 
 with open ('logs.json', 'r') as file:
     data = json.load(file)
-    print(data)
-    with open ('error_logs.csv', 'w') as newFile:
+    # print(data)
+    with open ('error_logs.csv', 'w', newline='') as newFile:
+        writer = csv.DictWriter(newFile, fieldnames=data[0])
+        writer.writeheader()
+        pattern = r"^Error"
         for item in data:
-            print(item['level'])
+            if re.search(pattern, item['message']):
+                writer.writerows(data)
+            else:
+                pass
